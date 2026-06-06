@@ -1,4 +1,4 @@
-# Kemal Li Academic Homepage
+# Li Yuejia Academic Homepage
 
 This is a lightweight static academic homepage for GitHub Pages.
 
@@ -24,7 +24,7 @@ Then publish from the `main` branch with GitHub Pages.
 
 ## Content To Replace
 
-- Replace `images/profile.png` with a real headshot.
-- Add a CV PDF at `files/Kemal_Li_CV.pdf`, then uncomment the CV link in `index.html`.
+- Replace `images/profile.jpg` with a real headshot.
+- Add a CV PDF at `files/Li_Yuejia_CV.pdf`, then uncomment the CV link in `index.html`.
 - Add a Google Scholar profile link once the profile is ready.
 - Add public papers to the Publications section only after they are public.

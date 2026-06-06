@@ -22,7 +22,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 16px;
   line-height: 1.65;
 }
@@ -89,9 +89,19 @@ h3 {
 }
 
 .affiliation {
-  margin-bottom: 20px;
+  margin-bottom: 4px;
   color: var(--muted);
   font-weight: 700;
+}
+
+.degree-period {
+  margin-bottom: 4px;
+  color: var(--muted);
+}
+
+.advisor {
+  margin-bottom: 20px;
+  color: var(--muted);
 }
 
 .summary {
@@ -203,6 +213,13 @@ time,
 
 .authors {
   margin-bottom: 2px;
+}
+
+.author-note {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 .item-links {
