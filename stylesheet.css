@@ -249,9 +249,15 @@ time,
 
 .visitor-stats img {
   display: block;
-  width: min(256px, 100%);
+  width: min(420px, 100%);
   height: auto;
   border: 0;
+}
+
+.visitor-caption {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
 }
 
 @media (max-width: 720px) {
