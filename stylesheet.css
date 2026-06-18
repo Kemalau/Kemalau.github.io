@@ -211,6 +211,28 @@ time,
   background: var(--surface);
 }
 
+.thumb-placeholder {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  background: linear-gradient(135deg, #174c6b, #0f766e);
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.thumb-placeholder span {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.thumb-placeholder strong {
+  font-size: 15px;
+  line-height: 1;
+}
+
 .authors {
   margin-bottom: 2px;
 }
