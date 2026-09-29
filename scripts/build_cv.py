@@ -125,8 +125,11 @@ story.append(KeepTogether([
 story += section('Internship Experience')
 story.append(KeepTogether([
     microsoft_row('Microsoft Research Asia, Star of Tomorrow Research Intern', 'Summer 2026'),
-    p(f'Mentor: <link href="https://www.microsoft.com/en-us/research/people/fangzwu/" {LINK}>Fangzhao Wu</link>', 'intern_body'),
-    p('Research on language models and model alignment; internship completed.', 'intern_small'), Spacer(1, 3),
+    p(f'Mentor: <link href="https://www.microsoft.com/en-us/research/people/fangzwu/" {LINK}>Fangzhao Wu</link>  &#183;  Internship completed', 'intern_body'),
+    p('Project 1: Radioactive Feedback: Tracing Models Trained by Proprietary LLM Judges <i>(under review at ICLR 2027)</i>', 'intern_small'),
+    p('Project 2: On the Vulnerability of Semantic IDs in Generative Recommendation <i>(under review at ICLR 2027)</i>', 'intern_small'),
+    p('Project 3: Towards Unbiased Generative Recommendation <i>(under review at ICLR 2027)</i>', 'intern_small'),
+    Spacer(1, 3),
 ]))
 
 story += section('Publications &amp; Preprints')
@@ -137,7 +140,8 @@ story.append(pub('See Before You Code: Learning Visual Priors for Spatially Awar
     'https://arxiv.org/abs/2605.15585',
     '<b>Yuejia Li*</b>, Ke He*, Junheng Li, Shutong Chen, Jingkang Xia, Zhiyue Su, Junchi Zhang, Mang Ye  (* equal contribution)', 'arXiv preprint, 2026'))
 story.append(pub('FedDiG: Federated Continual Graph Learning with Disentangled Generative Replay', None,
-    '<b>Yuejia Li*</b>, Zihan Tan*, Wenke Huang, Jinhe Bi, Bin Yang, Mang Ye  (* equal contribution)', 'Under review'))
+    '<b>Yuejia Li*</b>, Zihan Tan*, Wenke Huang, Bin Yang, Mang Ye  (* equal contribution)',
+    'Under review at ICLR 2027'))
 
 story += section('Ongoing Research')
 story.append(KeepTogether([
