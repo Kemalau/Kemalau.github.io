@@ -125,7 +125,7 @@ story.append(KeepTogether([
 story += section('Internship Experience')
 story.append(KeepTogether([
     microsoft_row('Microsoft Research Asia, Star of Tomorrow Research Intern', 'Summer 2026'),
-    p(f'Mentor: <link href="https://www.microsoft.com/en-us/research/people/fangzwu/" {LINK}>Fangzhao Wu</link>  &#183;  Internship completed', 'intern_body'),
+    p(f'Mentor: <link href="https://www.microsoft.com/en-us/research/people/fangzwu/" {LINK}>Fangzhao Wu</link>', 'intern_body'),
     p('Project 1: Radioactive Feedback: Tracing Models Trained by Proprietary LLM Judges <i>(under review at ICLR 2027)</i>', 'intern_small'),
     p('Project 2: On the Vulnerability of Semantic IDs in Generative Recommendation <i>(under review at ICLR 2027)</i>', 'intern_small'),
     p('Project 3: Towards Unbiased Generative Recommendation <i>(under review at ICLR 2027)</i>', 'intern_small'),
