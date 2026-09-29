@@ -6,7 +6,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import HRFlowable, KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.platypus import Flowable, HRFlowable, KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 OUTPUT = Path(__file__).resolve().parents[1] / 'files/Li_Yuejia_CV.pdf'
 PAGE_W, _ = A4
@@ -37,6 +37,28 @@ styles = {
     'date': ParagraphStyle('date', fontName=REGULAR, fontSize=10.1, leading=12.5, textColor=BLACK, alignment=TA_RIGHT),
     'venue': ParagraphStyle('venue', fontName=ITALIC, fontSize=9.5, leading=11.7, textColor=BLACK),
 }
+styles['intern_body'] = ParagraphStyle('intern_body', parent=styles['body'], leftIndent=17)
+styles['intern_small'] = ParagraphStyle('intern_small', parent=styles['small'], leftIndent=17)
+
+
+class MicrosoftMark(Flowable):
+    """Small vector version of the four-square Microsoft symbol."""
+
+    def __init__(self):
+        super().__init__()
+        self.width = self.height = 12
+
+    def draw(self):
+        side, gap = 5.3, 1.4
+        squares = (
+            (0, side + gap, '#F25022'),
+            (side + gap, side + gap, '#7FBA00'),
+            (0, 0, '#00A4EF'),
+            (side + gap, 0, '#FFB900'),
+        )
+        for x, y, color in squares:
+            self.canv.setFillColor(colors.HexColor(color))
+            self.canv.rect(x, y, side, side, stroke=0, fill=1)
 
 def p(value, style='body'):
     return Paragraph(value, styles[style])
@@ -46,6 +68,17 @@ def section(value):
 
 def row(left, right='', left_style='title'):
     table = Table([[p(left, left_style), p(right, 'date')]], colWidths=[WIDTH - 114, 114])
+    table.setStyle(TableStyle([
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 0), ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 0), ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+    ]))
+    return table
+
+
+def microsoft_row(left, right):
+    table = Table([[MicrosoftMark(), p(left, 'title'), p(right, 'date')]],
+                  colWidths=[17, WIDTH - 17 - 114, 114])
     table.setStyle(TableStyle([
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('LEFTPADDING', (0, 0), (-1, -1), 0), ('RIGHTPADDING', (0, 0), (-1, -1), 0),
@@ -91,9 +124,9 @@ story.append(KeepTogether([
 
 story += section('Internship Experience')
 story.append(KeepTogether([
-    row('Microsoft Research Asia, Star of Tomorrow Research Intern', 'Summer 2026'),
-    p(f'Mentor: <link href="https://www.microsoft.com/en-us/research/people/fangzwu/" {LINK}>Fangzhao Wu</link>'),
-    p('Research on language models and model alignment; internship completed.', 'small'), Spacer(1, 3),
+    microsoft_row('Microsoft Research Asia, Star of Tomorrow Research Intern', 'Summer 2026'),
+    p(f'Mentor: <link href="https://www.microsoft.com/en-us/research/people/fangzwu/" {LINK}>Fangzhao Wu</link>', 'intern_body'),
+    p('Research on language models and model alignment; internship completed.', 'intern_small'), Spacer(1, 3),
 ]))
 
 story += section('Publications &amp; Preprints')
