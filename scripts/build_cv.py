@@ -104,7 +104,7 @@ def pub(title, url, authors, venue):
 story = [
     p('Yuejia Li', 'name'),
     p('Undergraduate Student in Computer Science and Technology @ Wuhan University', 'subtitle'),
-    p(f'<link href="mailto:2024302111194@whu.edu.cn" {LINK}>2024302111194@whu.edu.cn</link>'
+    p(f'<link href="mailto:liyuejia@whu.edu.cn" {LINK}>liyuejia@whu.edu.cn</link>'
       '  &#183;  (+86) 152 7216 1950  &#183;  '
       f'<link href="https://scholar.google.com/citations?user=p9oPgT0AAAAJ" {LINK}>Google Scholar</link>'
       '  &#183;  ' f'<link href="https://github.com/Kemalau" {LINK}>GitHub</link>'
