@@ -111,7 +111,7 @@ story = [
       '  &#183;  ' f'<link href="https://kemalau.github.io/" {LINK}>Homepage</link>', 'contact'),
 ]
 story += section('Research &amp; Selected Experiences')
-story += bullet('My research interests include <b>representation learning</b>, <b>explainable AI</b>, <b>AI for social science</b>, and <b>multimodal learning</b>.')
+story += bullet('My research interests include <b>representation learning</b>, <b>explainable AI</b>, <b>responsible AI</b>, and <b>multimodal learning</b>.')
 story += bullet('Co-developed Semantic Consistency Learning for cross-species animal re-identification (<b>ECCV 2026</b>); evaluated on 11 datasets covering 40+ species, with the best Rank-1 and mAP on 8 of 10 unseen datasets.', 1)
 story += bullet('Our work on threshold-stable selective classification for FOIA privilege review was selected for an <b>NLPCC 2026 oral presentation</b>.', 1)
 
