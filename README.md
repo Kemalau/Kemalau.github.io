@@ -21,6 +21,8 @@ The homepage links to `files/Li_Yuejia_CV.pdf`. To regenerate it after editing
 python scripts/build_cv.py
 ```
 
+The CV uses Charter on macOS and falls back to Times where Charter is unavailable.
+
 ## Publish With GitHub Pages
 
 For a GitHub user site, the repository name should be:
