@@ -25,6 +25,5 @@ Then publish from the `main` branch with GitHub Pages.
 ## Content To Replace
 
 - Replace `images/profile.jpg` with a real headshot.
-- Add a CV PDF at `files/Li_Yuejia_CV.pdf`, then uncomment the CV link in `index.html`.
 - Add a Google Scholar profile link once the profile is ready.
 - Add public papers to the Publications section only after they are public.
