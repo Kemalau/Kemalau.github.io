@@ -153,7 +153,7 @@ story.append(KeepTogether([
 
 story += section('Community Contributions &amp; Projects')
 story += bullet(f'<link href="http://synesis.cn" {LINK}><b>Synesis AI</b></link> (co-founder and technical lead, 2025-present): AI-assisted learning products and multimodal teaching tools.')
-story += bullet(f'<link href="https://github.com/billion-token-one-task/Deepgraph" {LINK}><b>DeepGraph</b></link> (creator, 2026-present): research agent for literature discovery, proposal generation, experiment planning, and code execution.')
+story += bullet(f'<link href="https://github.com/billion-token-one-task/Deepgraph" {LINK}><b>DeepGraph</b></link> (creator, 2026-present; 500+ GitHub stars): research agent for literature discovery, hypothesis generation, and experiment execution.')
 story += bullet(f'<link href="https://github.com/billion-token-one-task/ClawOSS" {LINK}><b>ClawOSS</b></link> (co-author, 2026-present): open-source maintenance agent; project pull requests have been merged by PyPI, OpenClaw, and ByteDance DeepFlow.')
 story += bullet(f'<link href="https://github.com/openclaw/openclaw" {LINK}><b>OpenClaw</b></link> (contributor, 2026-present): agent workflow automation and engineering infrastructure.', 1)
 
