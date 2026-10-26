@@ -21,12 +21,19 @@ After editing or adding a Markdown post, rebuild the committed HTML pages:
 
 ```bash
 python -m pip install -r scripts/requirements-blog.txt
+npm ci --ignore-scripts
 python scripts/build_blog.py
 ```
 
 Preview with the local server above. The blog uses locally hosted ET Book fonts
 with their license in `blog/assets/fonts/LICENSE`. Full-size figures open when
 clicked. Push the source and generated HTML to `main` to publish via GitHub Pages.
+
+Use fenced `math` blocks for display equations and `$...$` for inline equations.
+The build renders KaTeX HTML and accessible MathML, and copies its licensed fonts
+and CSS locally; visitors do not need a third-party script for the equations.
+Article headings automatically form the desktop sidebar and mobile table of
+contents. The sidebar follows the current section as readers scroll.
 
 ## CV
 

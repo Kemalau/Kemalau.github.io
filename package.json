@@ -1,0 +1,8 @@
+{
+  "name": "kemalau-research-blog",
+  "private": true,
+  "description": "Build-time mathematical typesetting for the static research blog",
+  "devDependencies": {
+    "katex": "0.19.1"
+  }
+}

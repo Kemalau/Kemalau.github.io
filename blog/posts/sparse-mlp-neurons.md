@@ -18,21 +18,26 @@ We start by sampling Medical's answers to question panels, including the public 
 
 We replay these answers in Medical and compute an EM margin: the mean token log probability of the EM answers minus that of the aligned answers, averaging within each answer and then within each class. At the last assistant-header token, just before the answer begins, we measure each neuron's Medical-minus-Base activation gap and the gradient of this margin:
 
-```text
-M(q) = mean_EM[mean_token log P] − mean_aligned[mean_token log P]
-D(q,i) = a_Medical(q,i) − a_Base(q,i)
-T(q,i) = D(q,i) × ∂M(q)/∂a_Medical(q,i)
-score(i) = max(mean_q T(q,i), 0) × fraction_q[T(q,i) > 0]²
+```math
+\begin{aligned}
+\ell(y\mid q) &= \frac{1}{|y|}\sum_{t=1}^{|y|}\log P_{\mathrm{Medical}}(y_t\mid q,y_{<t}), \\[6pt]
+M(q) &= \mathbb{E}_{y\in\mathrm{EM}(q)}[\ell(y\mid q)]
+       - \mathbb{E}_{y\in\mathrm{aligned}(q)}[\ell(y\mid q)], \\[6pt]
+D(q,i) &= a_{\mathrm{Medical}}(q,i)-a_{\mathrm{Base}}(q,i), \\[6pt]
+T(q,i) &= D(q,i)\,\frac{\partial M(q)}{\partial a_{\mathrm{Medical}}(q,i)}, \\[6pt]
+\operatorname{score}(i) &= \max\!\left(\mathbb{E}_q[T(q,i)],0\right)
+                  \left(\mathbb{P}_q[T(q,i)>0]\right)^2.
+\end{aligned}
 ```
 
 A positive T means that reversing the activation gap is locally predicted to lower the EM margin. The score favors neurons whose contribution is positive across questions.
 
 For the public-question EM experiment, we start with 123 questions and remove 26 exact text matches to the evaluation panels. Ten samples on each of the remaining 97 questions give 970 answers. Filtering leaves 32 paired questions with 102 EM and 102 aligned answers. We score 340,992 MLP neurons in layers 0–17, rank them by this score, and select the top 90.
 
-After selection, we freeze each neuron's mean activation gap, `D_i = mean_q D(q,i)`, and use it for steering:
+After selection, we freeze each neuron's mean activation gap, $D_i = \mathbb{E}_q[D(q,i)]$, and use it for steering:
 
-```text
-a′_i = a_i + αD_i
+```math
+a'_i = a_i + \alpha D_i
 ```
 
 Adding this difference to Base, with α=+2, induces EM. Subtracting it from Medical, with α=−1, reduces EM. The edit covers the prompt and the first 32 cached forward passes during generation. The EM experiment also includes 90 random neurons matched for layer counts and local write magnitude. Further selection and experiment details are in the [technical appendix](/blog/sparse-mlp-neurons/appendix/).

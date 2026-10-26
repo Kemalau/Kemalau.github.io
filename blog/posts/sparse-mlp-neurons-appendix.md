@@ -33,19 +33,21 @@ For zero-based layer l and channel n, the dense coordinate is the post-SwiGLU va
 
 For retained question q, E_q and A_q are its accepted EM and aligned answer sets. T_y is the number of non-EOS answer tokens. All likelihoods and gradients are evaluated in Medical:
 
-```text
-ell(y|q) = (1/T_y) sum_t log p_medical(y_t | q, y_<t)
-M_q = mean_(y in E_q) ell(y|q) − mean_(y in A_q) ell(y|q)
-D_qi = a_medical(q,B,i) − a_base(q,B,i)
-g_qi = partial M_q / partial a_medical(q,B,i)
-T_qi = D_qi × g_qi
-c_i = mean_q 1[T_qi > 0]
-S_i = max(mean_q T_qi, 0) × c_i²
+```math
+\begin{aligned}
+\ell(y\mid q) &= \frac{1}{T_y}\sum_{t=1}^{T_y}\log p_{\mathrm{Medical}}(y_t\mid q,y_{<t}), \\[6pt]
+M_q &= \mathbb{E}_{y\in E_q}[\ell(y\mid q)]-\mathbb{E}_{y\in A_q}[\ell(y\mid q)], \\[6pt]
+D_{qi} &= a_{\mathrm{Medical}}(q,B,i)-a_{\mathrm{Base}}(q,B,i), \\[6pt]
+g_{qi} &= \frac{\partial M_q}{\partial a_{\mathrm{Medical}}(q,B,i)}, \\[6pt]
+T_{qi} &= D_{qi}\,g_{qi}, \\[6pt]
+c_i &= \mathbb{E}_q\!\left[\mathbf{1}\{T_{qi}>0\}\right], \\[6pt]
+S_i &= \max\!\left(\mathbb{E}_q[T_{qi}],0\right)c_i^2.
+\end{aligned}
 ```
 
 Teacher forcing scores each complete answer, excluding EOS, padding, and prompt tokens. Average within each answer first, then within each class; each class has unit weight, and questions have equal weight. Multiply gap and gradient within question before averaging. The primary ranking uses full answers; common-length and alternative-label rankings are separate sensitivities.
 
-Restoring a question-specific gap would give `delta a_i = −D_qi`, hence `delta M_q ≈ −T_qi`. Positive T is selected because reversing that displacement locally lowers the EM margin. This first-order statement is in log-probability units, and does not guarantee a large multi-layer generation effect.
+Restoring a question-specific gap would give $\Delta a_i = -D_{qi}$, hence $\Delta M_q \approx -T_{qi}$. Positive T is selected because reversing that displacement locally lowers the EM margin. This first-order statement is in log-probability units, and does not guarantee a large multi-layer generation effect.
 
 Qwen gradient computation promotes BF16-loaded frozen weights to FP32, disables TF32, and aggregates in FP64. The public preflight verifies zero-write identity, score equality, target masking, and boundary agreement. At L11/N18801, one analytic derivative is 0.00087948 versus central finite difference 0.00088185 at epsilon 0.05. These checks validate implementation locally, rather than certify all later doses.
 
@@ -79,10 +81,11 @@ Implementation checks verify zero-shift logit identity, unchanged padding and no
 
 ## 8. Steering definition and dose
 
-For selected coordinates G, freeze `Dbar_i = mean_q D_qi`, then use:
+For selected coordinates G, freeze $\bar{D}_i = \mathbb{E}_q[D_{qi}]$, then use:
 
-```text
-a'_i = cast_activation_dtype(FP32(a_i) + alpha × Dbar_i), i in G
+```math
+a'_i = \operatorname{cast}_{\text{activation dtype}}\!\left(
+\operatorname{FP32}(a_i) + \alpha\bar{D}_i\right),\qquad i\in G
 ```
 
 The gradient selects channels and is not added during generation. α=+2 in Base and α=−1 in Medical are distinct doses in different recipients. Preserve each channel's signed Dbar. Write at all real prompt positions, including system/role headers, then the first 32 cached forwards: 33 calls including prefill, directly affecting prediction of the first 33 generated tokens. Cache and generated-text effects can persist after direct writes stop. This extrapolates a boundary-derived mean shift across positions; it is not an online reference-model clamp, zero ablation, or same-question donor patch.
@@ -179,10 +182,13 @@ Training-state Figure 3 rereads three historical medical runs, 6,344 training ex
 
 For each channel group G, the plotted projection is:
 
-```text
-r_qG = a_publicMedical(q,G,B) − a_Base(q,G,B)
-d_kqG = a_checkpoint_k(q,G,B) − a_Base(q,G,B)
-P_k(G) = mean_24_prompts [dot(d_kqG, r_qG) / dot(r_qG, r_qG)]
+```math
+\begin{aligned}
+r_{qG} &= a_{\text{public Medical}}(q,G,B)-a_{\mathrm{Base}}(q,G,B), \\[6pt]
+d_{kqG} &= a_{\text{checkpoint }k}(q,G,B)-a_{\mathrm{Base}}(q,G,B), \\[6pt]
+P_k(G) &= \frac{1}{24}\sum_{q=1}^{24}
+          \frac{\langle d_{kqG},r_{qG}\rangle}{\langle r_{qG},r_{qG}\rangle}.
+\end{aligned}
 ```
 
 The graph shows 100P; this may be negative or exceed 100 and is not an EM probability. Four recovered natural generations per prompt, seed and step give 96 responses per seed/step, 288 per step, and 2,880 total rows. Historical decoding uses temperature 1, top-p 1, top-k 20, repetition penalty 1.05, maximum 256 tokens, native user-only Qwen template, no prefill or intervention, and question-hashed seeds rooted at 20260917. Token IDs/truncation flags are absent, so truncation rates are unknown. We use GPT-4o as an independent, blinded LLM judge: deployment `gpt-4o_2024-11-20`, API version `2024-10-21`, temperature 0, separate alignment/coherence calls, and rubric SHA256 `6ed7081c06e6ec93970917a28d73056ae488f3ec296b6c5301eac3626c9353d2`. All judgments are valid; EM remains alignment<30 and coherence>50.
