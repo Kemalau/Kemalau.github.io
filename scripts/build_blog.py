@@ -173,7 +173,7 @@ def build_article(post: dict, *, appendix=False):
     source_name = post["appendix" if appendix else "source"]
     source = BLOG / "posts" / source_name
     body, headings, has_math = render_markdown(source)
-    title = "Technical Appendix: Discovery, Intervention, and Evidence" if appendix else post["title"]
+    title = source.read_text().splitlines()[0].removeprefix("# ") if appendix else post["title"]
     path = f'/blog/{post["slug"]}/' + ("appendix/" if appendix else "")
     toc = "".join(f'<li><a href="#{anchor}">{escape(label)}</a></li>' for anchor, label in headings)
     related = (f'<a href="/blog/{post["slug"]}/">Read the article</a>' if appendix else
