@@ -179,10 +179,13 @@ def build_article(post: dict, *, appendix=False):
     related = (f'<a href="/blog/{post["slug"]}/">Read the article</a>' if appendix else
                f'<a href="/blog/{post["slug"]}/appendix/">Technical appendix</a>') if post.get("appendix") else ""
     content = f'''
-    <aside class="toc-sidebar" aria-label="Article navigation">
-      <a class="toc-title" href="#article-top">{escape(title)}</a>
-      <nav aria-label="Table of contents"><ol>{toc}</ol></nav>
-    </aside>
+    <div class="toc-drawer">
+      <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="article-contents">Contents</button>
+      <aside class="toc-sidebar" id="article-contents" aria-label="Article navigation">
+        <a class="toc-title" href="#article-top">{escape(title)}</a>
+        <nav aria-label="Table of contents"><ol>{toc}</ol></nav>
+      </aside>
+    </div>
     <article class="post" id="article-top">
       <header class="post-header">
         <p class="eyebrow">{'Technical appendix' if appendix else escape(post['category'])}</p>

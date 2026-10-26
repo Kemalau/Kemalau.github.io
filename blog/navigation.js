@@ -3,6 +3,9 @@
 
   const sidebar = document.querySelector(".toc-sidebar");
   if (!sidebar) return;
+  const drawer = sidebar.closest(".toc-drawer");
+  const toggle = drawer?.querySelector(".toc-toggle");
+  if (!drawer || !toggle) return;
 
   const titleLink = sidebar.querySelector(".toc-title");
   const entries = Array.from(sidebar.querySelectorAll("nav a[href^='#']"))
@@ -23,9 +26,45 @@
   let activeLink = null;
   let pending = false;
   let revealRequested = false;
+  let pinned = false;
+
+  function setOpen(open) {
+    open = open && desktop.matches;
+    drawer.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    sidebar.inert = !open;
+    sidebar.setAttribute("aria-hidden", String(!open));
+    if (open) schedule(true);
+  }
+
+  drawer.addEventListener("pointerenter", (event) => {
+    if (event.pointerType === "mouse") setOpen(true);
+  });
+  drawer.addEventListener("pointerleave", () => {
+    if (!pinned && !drawer.contains(document.activeElement)) setOpen(false);
+  });
+  toggle.addEventListener("click", () => {
+    pinned = !pinned;
+    setOpen(pinned);
+  });
+  drawer.addEventListener("focusout", () => {
+    window.requestAnimationFrame(() => {
+      if (!pinned && !drawer.contains(document.activeElement) && !drawer.matches(":hover")) setOpen(false);
+    });
+  });
+  document.addEventListener("pointerdown", (event) => {
+    if (!drawer.contains(event.target)) { pinned = false; setOpen(false); }
+  });
+  drawer.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    event.preventDefault();
+    pinned = false;
+    toggle.focus({ preventScroll: true });
+    setOpen(false);
+  });
 
   function revealInSidebar(link) {
-    if (!desktop.matches || !link) return;
+    if (!desktop.matches || !drawer.classList.contains("is-open") || !link) return;
     const bounds = sidebar.getBoundingClientRect();
     const item = link.getBoundingClientRect();
     const inset = 12;
@@ -80,10 +119,21 @@
   window.addEventListener("hashchange", () => schedule(true));
   window.addEventListener("load", () => schedule(true));
   window.addEventListener("pageshow", () => schedule(true));
-  desktop.addEventListener("change", () => schedule(true));
+  desktop.addEventListener("change", () => { pinned = false; setOpen(false); schedule(true); });
   sidebar.addEventListener("click", (event) => {
-    if (event.target.closest("a[href^='#']")) schedule(true);
+    const link = event.target.closest("a[href^='#']");
+    if (!link) return;
+    const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
+    if (target) {
+      target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    }
+    pinned = false;
+    setOpen(false);
+    schedule(true);
   });
   if (document.fonts) document.fonts.ready.then(() => schedule(true));
+  document.documentElement.classList.add("toc-enhanced");
+  setOpen(false);
   schedule(true);
 })();

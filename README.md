@@ -33,7 +33,9 @@ Use fenced `math` blocks for display equations and `$...$` for inline equations.
 The build renders KaTeX HTML and accessible MathML, and copies its licensed fonts
 and CSS locally; visitors do not need a third-party script for the equations.
 Article headings automatically form the desktop sidebar and mobile table of
-contents. The sidebar follows the current section as readers scroll.
+contents. On desktop, hover over the left edge to reveal the contents, or click
+the Contents tab to keep it open. Escape closes it. The current section is
+highlighted as readers scroll; mobile and no-JavaScript views use a collapsible list.
 
 The build adds content versions to homepage and blog CSS/JavaScript URLs, so a
 browser with an older cached stylesheet fetches the matching styles after an
