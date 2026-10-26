@@ -331,6 +331,8 @@ time,
 
 .visitor-stats {
   margin-bottom: 14px;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .visitor-stats img {

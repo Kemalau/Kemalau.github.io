@@ -35,6 +35,10 @@ and CSS locally; visitors do not need a third-party script for the equations.
 Article headings automatically form the desktop sidebar and mobile table of
 contents. The sidebar follows the current section as readers scroll.
 
+The build adds content versions to homepage and blog CSS/JavaScript URLs, so a
+browser with an older cached stylesheet fetches the matching styles after an
+update. Run the same build after editing `stylesheet.css` or blog assets.
+
 ## CV
 
 The homepage links to `files/Li_Yuejia_CV.pdf`. To regenerate it after editing

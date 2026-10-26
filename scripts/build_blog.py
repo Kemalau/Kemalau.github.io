@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import html
+import hashlib
 import json
 import re
 import shutil
@@ -15,6 +16,24 @@ from markdown_it import MarkdownIt
 ROOT = Path(__file__).resolve().parents[1]
 BLOG = ROOT / "blog"
 SITE = "https://kemalau.github.io"
+
+
+def asset_url(path: str) -> str:
+    """Change URLs with asset content to avoid stale CSS/JS after deployment."""
+    digest = hashlib.sha256((ROOT / path.lstrip("/")).read_bytes()).hexdigest()[:12]
+    return f"{path}?v={digest}"
+
+
+def update_homepage_assets():
+    path = ROOT / "index.html"
+    content = path.read_text()
+    content, count = re.subn(
+        r'href="stylesheet\.css(?:\?[^\"]*)?"',
+        f'href="{asset_url("stylesheet.css")}"', content,
+    )
+    if count != 1:
+        raise ValueError("Expected one homepage stylesheet link")
+    path.write_text(content)
 
 
 def inline_math(state, silent):
@@ -128,9 +147,9 @@ def shell(title: str, description: str, path: str, content: str, *, article=Fals
   <meta property="og:url" content="{SITE}{path}">
   {image_meta}
   <link rel="preload" href="/blog/assets/fonts/et-book-roman.woff" as="font" type="font/woff" crossorigin>
-  <link rel="stylesheet" href="/blog/blog.css">
-  {'<link rel="stylesheet" href="/blog/assets/katex/katex.min.css">' if has_math else ''}
-  {'<script src="/blog/navigation.js" defer></script>' if article else ''}
+  <link rel="stylesheet" href="{asset_url('/blog/blog.css')}">
+  {'<link rel="stylesheet" href="' + asset_url('/blog/assets/katex/katex.min.css') + '">' if has_math else ''}
+  {'<script src="' + asset_url('/blog/navigation.js') + '" defer></script>' if article else ''}
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -182,6 +201,7 @@ def build_article(post: dict, *, appendix=False):
 
 def main():
     copy_math_assets()
+    update_homepage_assets()
     posts = sorted(json.loads((BLOG / "posts.json").read_text()), key=lambda p: p["date"], reverse=True)
     cards = []
     for post in posts:
