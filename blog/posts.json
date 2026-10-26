@@ -1,0 +1,11 @@
+[
+  {
+    "slug": "sparse-mlp-neurons",
+    "title": "Sparse MLP Neurons Shape Emergent Misalignment and Moral Choices",
+    "date": "2026-10-26",
+    "category": "Research note",
+    "description": "Editing small groups of native MLP neurons changes emergent misalignment and explicit moral choices. Results, a gradient-based discovery method, and observations from training.",
+    "source": "sparse-mlp-neurons.md",
+    "appendix": "sparse-mlp-neurons-appendix.md"
+  }
+]

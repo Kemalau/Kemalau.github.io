@@ -12,6 +12,22 @@ python -m http.server 8000
 
 Then visit `http://localhost:8000`.
 
+## Blog
+
+The blog lives at `/blog/`. Article sources are in `blog/posts/`; titles,
+publication dates, and summaries are listed in `blog/posts.json`.
+
+After editing or adding a Markdown post, rebuild the committed HTML pages:
+
+```bash
+python -m pip install -r scripts/requirements-blog.txt
+python scripts/build_blog.py
+```
+
+Preview with the local server above. The blog uses locally hosted ET Book fonts
+with their license in `blog/assets/fonts/LICENSE`. Full-size figures open when
+clicked. Push the source and generated HTML to `main` to publish via GitHub Pages.
+
 ## CV
 
 The homepage links to `files/Li_Yuejia_CV.pdf`. To regenerate it after editing
