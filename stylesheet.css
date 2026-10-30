@@ -413,3 +413,30 @@ time,
     margin-right: 12px;
   }
 }
+
+.publication-header {
+  padding: 18px 0 30px;
+  border-bottom: 1px solid var(--line);
+}
+
+.publication-header .site-name {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.publication-header .profile-links {
+  margin-bottom: 32px;
+}
+
+.profile-links a[aria-current="page"] {
+  color: var(--teal);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.publication-header > p {
+  margin: 12px 0 0;
+}
