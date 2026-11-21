@@ -30,7 +30,7 @@ styles = {
     'name': ParagraphStyle('name', fontName=REGULAR, fontSize=22.5, leading=25, textColor=BLACK, spaceAfter=2),
     'subtitle': ParagraphStyle('subtitle', fontName=REGULAR, fontSize=10.5, leading=13.2, textColor=BLACK, spaceAfter=5),
     'contact': ParagraphStyle('contact', fontName=REGULAR, fontSize=8.7, leading=11, textColor=BLACK, spaceAfter=3),
-    'section': ParagraphStyle('section', fontName=BOLD, fontSize=13.8, leading=16.5, textColor=BLACK, spaceBefore=8, spaceAfter=1),
+    'section': ParagraphStyle('section', fontName=BOLD, fontSize=13.8, leading=16.5, textColor=BLACK, spaceBefore=6, spaceAfter=1),
     'body': ParagraphStyle('body', fontName=REGULAR, fontSize=10.3, leading=12.5, textColor=BLACK),
     'small': ParagraphStyle('small', fontName=REGULAR, fontSize=9.3, leading=11.7, textColor=BLACK),
     'title': ParagraphStyle('title', fontName=BOLD, fontSize=10.6, leading=12.5, textColor=BLACK),
@@ -124,6 +124,12 @@ story.append(KeepTogether([
 ]))
 
 story += section('Internship Experience')
+story.append(KeepTogether([
+    row('University of Wisconsin-Madison, Research Assistant'),
+    p(f'Mentor: <link href="https://luoxiao12.github.io/" {LINK}>Xiao Luo</link>', 'intern_body'),
+    p('Project: Multimodal Intent Recognition', 'intern_small'),
+    Spacer(1, 4),
+]))
 story.append(KeepTogether([
     microsoft_row('Microsoft Research Asia, Star of Tomorrow Research Intern', 'Summer 2026'),
     p(f'Social Computing Group  &#183;  Mentor: <link href="https://www.microsoft.com/en-us/research/people/fangzwu/" {LINK}>Fangzhao Wu</link>', 'intern_body'),
