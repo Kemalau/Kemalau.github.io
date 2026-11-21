@@ -319,6 +319,18 @@ time,
   padding: 14px 0;
 }
 
+.institution-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.institution-logo {
+  flex: 0 0 auto;
+  width: 20px;
+  height: auto;
+}
+
 .contact-line {
   font-weight: 700;
 }

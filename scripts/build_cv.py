@@ -6,9 +6,11 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import Flowable, HRFlowable, KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.platypus import Flowable, HRFlowable, Image, KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
-OUTPUT = Path(__file__).resolve().parents[1] / 'files/Li_Yuejia_CV.pdf'
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / 'files/Li_Yuejia_CV.pdf'
+UW_CREST = ROOT / 'images/uw-madison-crest.png'
 PAGE_W, _ = A4
 MARGIN = 43
 WIDTH = PAGE_W - 2 * MARGIN
@@ -76,8 +78,8 @@ def row(left, right='', left_style='title'):
     return table
 
 
-def microsoft_row(left, right):
-    table = Table([[MicrosoftMark(), p(left, 'title'), p(right, 'date')]],
+def institution_row(mark, left, right):
+    table = Table([[mark, p(left, 'title'), p(right, 'date')]],
                   colWidths=[17, WIDTH - 17 - 114, 114])
     table.setStyle(TableStyle([
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
@@ -125,13 +127,14 @@ story.append(KeepTogether([
 
 story += section('Internship Experience')
 story.append(KeepTogether([
-    row('University of Wisconsin-Madison, Research Assistant'),
+    institution_row(Image(str(UW_CREST), width=12, height=16, kind='proportional', mask='auto'),
+                    'University of Wisconsin-Madison, Research Assistant', 'Present'),
     p(f'Mentor: <link href="https://luoxiao12.github.io/" {LINK}>Xiao Luo</link>', 'intern_body'),
     p('Project: Multimodal Intent Recognition', 'intern_small'),
-    Spacer(1, 4),
+    Spacer(1, 2),
 ]))
 story.append(KeepTogether([
-    microsoft_row('Microsoft Research Asia, Star of Tomorrow Research Intern', 'Summer 2026'),
+    institution_row(MicrosoftMark(), 'Microsoft Research Asia, Star of Tomorrow Research Intern', 'Summer 2026'),
     p(f'Social Computing Group  &#183;  Mentor: <link href="https://www.microsoft.com/en-us/research/people/fangzwu/" {LINK}>Fangzhao Wu</link>', 'intern_body'),
     p('Project 1: Radioactive Feedback: Tracing Models Trained by Proprietary LLM Judges', 'intern_small'),
     p('Project 2: On the Vulnerability of Semantic IDs in Generative Recommendation', 'intern_small'),
