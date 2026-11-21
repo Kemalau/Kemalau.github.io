@@ -98,7 +98,8 @@ def bullet(value, gap=3):
 def pub(title, url, authors, venue):
     linked = f'<link href="{url}" {LINK}>{title}</link>' if url else title
     return KeepTogether([
-        row('&#8226;&nbsp;&nbsp;' + linked), p(authors, 'small'), p(venue, 'venue'), Spacer(1, 8),
+        row('&#8226;&nbsp;&nbsp;' + linked), p(authors, 'small'),
+        *([p(venue, 'venue')] if venue else []), Spacer(1, 8),
     ])
 
 story = [
@@ -126,10 +127,10 @@ story += section('Internship Experience')
 story.append(KeepTogether([
     microsoft_row('Microsoft Research Asia, Star of Tomorrow Research Intern', 'Summer 2026'),
     p(f'Social Computing Group  &#183;  Mentor: <link href="https://www.microsoft.com/en-us/research/people/fangzwu/" {LINK}>Fangzhao Wu</link>', 'intern_body'),
-    p('Project 1: Radioactive Feedback: Tracing Models Trained by Proprietary LLM Judges <i>(under review at ICLR 2027)</i>', 'intern_small'),
-    p('Project 2: On the Vulnerability of Semantic IDs in Generative Recommendation <i>(under review at ICLR 2027)</i>', 'intern_small'),
-    p('Project 3: Towards Unbiased Generative Recommendation <i>(under review at ICLR 2027)</i>', 'intern_small'),
-    p('Project 4: On the Mechanisms of Safety Failure in Large Language Models<br/><i>(under review at Nature Machine Intelligence)</i>', 'intern_small'),
+    p('Project 1: Radioactive Feedback: Tracing Models Trained by Proprietary LLM Judges', 'intern_small'),
+    p('Project 2: On the Vulnerability of Semantic IDs in Generative Recommendation', 'intern_small'),
+    p('Project 3: Towards Unbiased Generative Recommendation', 'intern_small'),
+    p('Project 4: On the Mechanisms of Safety Failure in Large Language Models', 'intern_small'),
     Spacer(1, 3),
 ]))
 
@@ -142,7 +143,7 @@ story.append(pub('See Before You Code: Learning Visual Priors for Spatially Awar
     '<b>Yuejia Li*</b>, Ke He*, Junheng Li, Shutong Chen, Jingkang Xia, Zhiyue Su, Junchi Zhang, Mang Ye  (* equal contribution)', 'arXiv preprint, 2026'))
 story.append(pub('FedDiG: Federated Continual Graph Learning with Disentangled Generative Replay', None,
     '<b>Yuejia Li*</b>, Zihan Tan*, Wenke Huang, Bin Yang, Mang Ye  (* equal contribution)',
-    'Under review at ICLR 2027'))
+    None))
 
 story += section('Ongoing Research')
 story.append(KeepTogether([
