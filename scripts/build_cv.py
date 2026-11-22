@@ -160,7 +160,7 @@ story.append(KeepTogether([
 ]))
 
 story += section('Publications &amp; Preprints')
-story.append(pub('Sparse Neural Control Of Unethical Behavior In Language Models', None,
+story.append(pub('Sparse Neural Control of Unethical Behavior in Language Models', None,
     '<b>Yuejia Li</b>, Hao Wu, Ke He, Xiyuan Yang, Mang Ye, Fangzhao Wu', 'Manuscript, 2026'))
 story.append(pub('Radioactive Feedback: Tracing Models Trained by Label-Only LLM Supervision',
     'https://arxiv.org/abs/2610.15685',
