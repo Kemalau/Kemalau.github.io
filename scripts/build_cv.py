@@ -124,11 +124,15 @@ story.append(KeepTogether([
     row('Wuhan University', 'Wuhan, China', 'body'),
     p('Research supervisor: Prof. Mang Ye  &#183;  Average score: 88.5/100', 'small'), Spacer(1, 4),
 ]))
+story.append(KeepTogether([
+    row('Exchange Student, University of California, Berkeley', 'Jan. 2027 - May 2027'),
+    Spacer(1, 4),
+]))
 
 story += section('Internship Experience')
 story.append(KeepTogether([
     institution_row(Image(str(UW_CREST), width=12, height=16, kind='proportional', mask='auto'),
-                    'University of Wisconsin-Madison, Research Assistant', 'Present'),
+                    'University of Wisconsin-Madison, Research Assistant', 'Sep. 2026 - Nov. 2026'),
     p(f'Mentor: <link href="https://luoxiao12.github.io/" {LINK}>Xiao Luo</link>', 'intern_body'),
     p('Project: Multimodal Intent Recognition', 'intern_small'),
     Spacer(1, 2),
@@ -136,7 +140,7 @@ story.append(KeepTogether([
 story.append(KeepTogether([
     institution_row(MicrosoftMark(), 'Microsoft Research Asia, Star of Tomorrow Research Intern', 'Summer 2026'),
     p(f'Social Computing Group  &#183;  Mentor: <link href="https://www.microsoft.com/en-us/research/people/fangzwu/" {LINK}>Fangzhao Wu</link>', 'intern_body'),
-    p('Project 1: Radioactive Feedback: Tracing Models Trained by Proprietary LLM Judges', 'intern_small'),
+    p('Project 1: Radioactive Feedback: Tracing Models Trained by Label-Only LLM Supervision', 'intern_small'),
     p('Project 2: On the Vulnerability of Semantic IDs in Generative Recommendation', 'intern_small'),
     p('Project 3: Towards Unbiased Generative Recommendation', 'intern_small'),
     p('Project 4: On the Mechanisms of Safety Failure in Large Language Models', 'intern_small'),
@@ -144,6 +148,9 @@ story.append(KeepTogether([
 ]))
 
 story += section('Publications &amp; Preprints')
+story.append(pub('Radioactive Feedback: Tracing Models Trained by Label-Only LLM Supervision',
+    'https://arxiv.org/abs/2610.15685',
+    '<b>Yuejia Li</b>, JunHeng Li, Hao Wu, Ke He, Mang Ye', 'arXiv preprint, 2026'))
 story.append(pub('Cross-Species Animal Re-Identification with Semantic Consistency Learning',
     'https://arxiv.org/abs/2609.09705',
     'Shuoyi Chen*, <b>Yuejia Li*</b>, Mang Ye  (* equal contribution)', 'ECCV 2026'))
@@ -154,16 +161,9 @@ story.append(pub('FedDiG: Federated Continual Graph Learning with Disentangled G
     '<b>Yuejia Li*</b>, Zihan Tan*, Wenke Huang, Bin Yang, Mang Ye  (* equal contribution)',
     None))
 
-story += section('Ongoing Research')
-story.append(KeepTogether([
-    row('AI-Assisted Learning Silently Degrades Metacognition', 'In progress'),
-    p('Yuejia Li, Synesis AI  &#183;  Supervisor: Mang Ye', 'small'),
-    p('Developing a Bayesian cognitive model, behavioral observation framework, pseudo-understanding risk index, and cognition-aware interventions; a prototype and small-scale validation are complete.', 'small'), Spacer(1, 2),
-]))
-
 story += section('Community Contributions &amp; Projects')
 story += bullet(f'<link href="http://synesis.cn" {LINK}><b>Synesis AI</b></link> (co-founder and technical lead, 2025-present): AI-assisted learning products and multimodal teaching tools.')
-story += bullet(f'<link href="https://github.com/billion-token-one-task/Deepgraph" {LINK}><b>DeepGraph</b></link> (creator, 2026-present; 500+ GitHub stars): research agent for literature discovery, hypothesis generation, and experiment execution.')
+story += bullet(f'<link href="https://deepgraph.joulebeat.com" {LINK}><b>DeepGraph</b></link> [<link href="https://github.com/billion-token-one-task/Deepgraph" {LINK}>GitHub</link>] (creator, 2026-present; <b>3.1k+ GitHub stars</b>): research agent for literature discovery, hypothesis generation, and experiment execution.')
 story += bullet(f'<link href="https://github.com/billion-token-one-task/ClawOSS" {LINK}><b>ClawOSS</b></link> (co-author, 2026-present): open-source maintenance agent; project pull requests have been merged by PyPI, OpenClaw, and ByteDance DeepFlow.')
 story += bullet(f'<link href="https://github.com/openclaw/openclaw" {LINK}><b>OpenClaw</b></link> (contributor, 2026-present): agent workflow automation and engineering infrastructure.', 1)
 
