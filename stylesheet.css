@@ -321,14 +321,25 @@ time,
 
 .institution-heading {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
 }
 
 .institution-logo {
   flex: 0 0 auto;
   width: 20px;
-  height: auto;
+  height: 24px;
+  object-fit: contain;
+}
+
+.institution-name {
+  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.institution-entry > p {
+  margin-left: 30px;
 }
 
 .contact-line {

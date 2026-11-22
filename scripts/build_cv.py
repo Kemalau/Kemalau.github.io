@@ -6,14 +6,17 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import Flowable, HRFlowable, Image, KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.platypus import BaseDocTemplate, Flowable, Frame, HRFlowable, Image, KeepTogether, PageTemplate, Paragraph, Spacer, Table, TableStyle
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'files/Li_Yuejia_CV.pdf'
 UW_CREST = ROOT / 'images/uw-madison-crest.png'
+WHU_SEAL = ROOT / 'images/wuhan-university-seal.png'
+BERKELEY_SEAL = ROOT / 'images/uc-berkeley-seal.png'
 PAGE_W, _ = A4
 MARGIN = 43
 WIDTH = PAGE_W - 2 * MARGIN
+INSTITUTION_INDENT = 24
 BLACK = colors.HexColor('#111111')
 BLUE = '#174C9A'
 LINK = f'color="{BLUE}"'
@@ -36,11 +39,12 @@ styles = {
     'body': ParagraphStyle('body', fontName=REGULAR, fontSize=10.3, leading=12.5, textColor=BLACK),
     'small': ParagraphStyle('small', fontName=REGULAR, fontSize=9.3, leading=11.7, textColor=BLACK),
     'title': ParagraphStyle('title', fontName=BOLD, fontSize=10.6, leading=12.5, textColor=BLACK),
-    'date': ParagraphStyle('date', fontName=REGULAR, fontSize=10.1, leading=12.5, textColor=BLACK, alignment=TA_RIGHT),
+    'date': ParagraphStyle('date', fontName=REGULAR, fontSize=10.6, leading=12.5, textColor=BLACK, alignment=TA_RIGHT),
     'venue': ParagraphStyle('venue', fontName=ITALIC, fontSize=9.5, leading=11.7, textColor=BLACK),
 }
-styles['intern_body'] = ParagraphStyle('intern_body', parent=styles['body'], leftIndent=17)
-styles['intern_small'] = ParagraphStyle('intern_small', parent=styles['small'], leftIndent=17)
+styles['intern_body'] = ParagraphStyle('intern_body', parent=styles['body'], leftIndent=INSTITUTION_INDENT)
+styles['intern_small'] = ParagraphStyle('intern_small', parent=styles['small'], leftIndent=INSTITUTION_INDENT)
+styles['location'] = ParagraphStyle('location', parent=styles['body'], alignment=TA_RIGHT)
 
 
 class MicrosoftMark(Flowable):
@@ -69,7 +73,7 @@ def section(value):
     return [p(value, 'section'), HRFlowable(width='100%', thickness=0.6, color=BLACK, spaceAfter=7)]
 
 def row(left, right='', left_style='title'):
-    table = Table([[p(left, left_style), p(right, 'date')]], colWidths=[WIDTH - 114, 114])
+    table = Table([[p(left, left_style), p(right, 'date')]], colWidths=[WIDTH - 114, 114], hAlign='LEFT')
     table.setStyle(TableStyle([
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('LEFTPADDING', (0, 0), (-1, -1), 0), ('RIGHTPADDING', (0, 0), (-1, -1), 0),
@@ -78,18 +82,23 @@ def row(left, right='', left_style='title'):
     return table
 
 
-def institution_row(mark, left, right):
-    table = Table([[mark, p(left, 'title'), p(right, 'date')]],
-                  colWidths=[17, WIDTH - 17 - 114, 114])
+def institution_row(mark, left, right='', left_style='title'):
+    right_style = 'date' if left_style == 'title' else 'location'
+    table = Table([[mark if mark is not None else '', p(left, left_style), p(right, right_style)]],
+                  colWidths=[INSTITUTION_INDENT, WIDTH - INSTITUTION_INDENT - 114, 114], hAlign='LEFT')
     table.setStyle(TableStyle([
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('ALIGN', (0, 0), (0, 0), 'CENTER'),
         ('LEFTPADDING', (0, 0), (-1, -1), 0), ('RIGHTPADDING', (0, 0), (-1, -1), 0),
         ('TOPPADDING', (0, 0), (-1, -1), 0), ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
     ]))
     return table
+
+def seal(path):
+    return Image(str(path), width=16, height=16, kind='proportional', mask='auto')
 
 def bullet(value, gap=3):
-    table = Table([[p('&#8226;'), p(value)]], colWidths=[14, WIDTH - 14])
+    table = Table([[p('&#8226;'), p(value)]], colWidths=[14, WIDTH - 14], hAlign='LEFT')
     table.setStyle(TableStyle([
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('LEFTPADDING', (0, 0), (-1, -1), 0), ('RIGHTPADDING', (0, 0), (-1, -1), 0),
@@ -120,18 +129,19 @@ story += bullet('Our work on threshold-stable selective classification for FOIA 
 
 story += section('Education')
 story.append(KeepTogether([
-    row('Undergraduate, Computer Science and Technology (Hongyi Honor Class)', '2024-2028 (expected)'),
-    row('Wuhan University', 'Wuhan, China', 'body'),
-    p('Research supervisor: Prof. Mang Ye  &#183;  Average score: 88.5/100', 'small'), Spacer(1, 4),
+    institution_row(seal(WHU_SEAL), 'Undergraduate, Computer Science and Technology (Hongyi Honor Class)', '2024-2028 (expected)'),
+    institution_row(None, 'Wuhan University', 'Wuhan, China', 'body'),
+    p('Research supervisor: Prof. Mang Ye  &#183;  Average score: 88.5/100', 'intern_small'), Spacer(1, 4),
 ]))
 story.append(KeepTogether([
-    row('Exchange Student, University of California, Berkeley', 'Jan. 2027 - May 2027'),
+    institution_row(seal(BERKELEY_SEAL), 'Exchange Student', 'Jan. 2027 - May 2027'),
+    institution_row(None, 'University of California, Berkeley', 'Berkeley, CA, USA', 'body'),
     Spacer(1, 4),
 ]))
 
 story += section('Internship Experience')
 story.append(KeepTogether([
-    institution_row(Image(str(UW_CREST), width=12, height=16, kind='proportional', mask='auto'),
+    institution_row(seal(UW_CREST),
                     'University of Wisconsin-Madison, Research Assistant', 'Sep. 2026 - Nov. 2026'),
     p(f'Mentor: <link href="https://luoxiao12.github.io/" {LINK}>Xiao Luo</link>', 'intern_body'),
     p('Project: Multimodal Intent Recognition', 'intern_small'),
@@ -168,7 +178,11 @@ story += bullet(f'<link href="https://github.com/billion-token-one-task/ClawOSS"
 story += bullet(f'<link href="https://github.com/openclaw/openclaw" {LINK}><b>OpenClaw</b></link> (contributor, 2026-present): agent workflow automation and engineering infrastructure.', 1)
 
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-SimpleDocTemplate(str(OUTPUT), pagesize=A4, leftMargin=MARGIN, rightMargin=MARGIN,
+document = BaseDocTemplate(str(OUTPUT), pagesize=A4, leftMargin=MARGIN, rightMargin=MARGIN,
     topMargin=29, bottomMargin=28, title='Yuejia Li - Curriculum Vitae', author='Yuejia Li',
-    subject='English academic curriculum vitae').build(story)
+    subject='English academic curriculum vitae')
+document.addPageTemplates(PageTemplate(id='CV', frames=Frame(
+    document.leftMargin, document.bottomMargin, document.width, document.height,
+    leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0)))
+document.build(story)
 print(OUTPUT)
