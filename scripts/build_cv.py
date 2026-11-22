@@ -35,7 +35,7 @@ styles = {
     'name': ParagraphStyle('name', fontName=REGULAR, fontSize=22.5, leading=25, textColor=BLACK, spaceAfter=2),
     'subtitle': ParagraphStyle('subtitle', fontName=REGULAR, fontSize=10.5, leading=13.2, textColor=BLACK, spaceAfter=5),
     'contact': ParagraphStyle('contact', fontName=REGULAR, fontSize=8.7, leading=11, textColor=BLACK, spaceAfter=3),
-    'section': ParagraphStyle('section', fontName=BOLD, fontSize=13.8, leading=16.5, textColor=BLACK, spaceBefore=6, spaceAfter=1),
+    'section': ParagraphStyle('section', fontName=BOLD, fontSize=13.8, leading=16.5, textColor=BLACK, spaceBefore=5, spaceAfter=1),
     'body': ParagraphStyle('body', fontName=REGULAR, fontSize=10.3, leading=12.5, textColor=BLACK),
     'small': ParagraphStyle('small', fontName=REGULAR, fontSize=9.3, leading=11.7, textColor=BLACK),
     'title': ParagraphStyle('title', fontName=BOLD, fontSize=10.6, leading=12.5, textColor=BLACK),
@@ -45,6 +45,8 @@ styles = {
 styles['intern_body'] = ParagraphStyle('intern_body', parent=styles['body'], leftIndent=INSTITUTION_INDENT)
 styles['intern_small'] = ParagraphStyle('intern_small', parent=styles['small'], leftIndent=INSTITUTION_INDENT)
 styles['location'] = ParagraphStyle('location', parent=styles['body'], alignment=TA_RIGHT)
+styles['publication_authors'] = ParagraphStyle('publication_authors', parent=styles['small'], leftIndent=14)
+styles['publication_venue'] = ParagraphStyle('publication_venue', parent=styles['venue'], leftIndent=14)
 
 
 class MicrosoftMark(Flowable):
@@ -97,8 +99,8 @@ def institution_row(mark, left, right='', left_style='title'):
 def seal(path):
     return Image(str(path), width=16, height=16, kind='proportional', mask='auto')
 
-def bullet(value, gap=3):
-    table = Table([[p('&#8226;'), p(value)]], colWidths=[14, WIDTH - 14], hAlign='LEFT')
+def bullet(value, gap=3, text_style='body'):
+    table = Table([[p('&#8226;', text_style), p(value, text_style)]], colWidths=[14, WIDTH - 14], hAlign='LEFT')
     table.setStyle(TableStyle([
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('LEFTPADDING', (0, 0), (-1, -1), 0), ('RIGHTPADDING', (0, 0), (-1, -1), 0),
@@ -109,8 +111,8 @@ def bullet(value, gap=3):
 def pub(title, url, authors, venue):
     linked = f'<link href="{url}" {LINK}>{title}</link>' if url else title
     return KeepTogether([
-        row('&#8226;&nbsp;&nbsp;' + linked), p(authors, 'small'),
-        *([p(venue, 'venue')] if venue else []), Spacer(1, 8),
+        *bullet(linked, 0, 'title'), p(authors, 'publication_authors'),
+        *([p(venue, 'publication_venue')] if venue else []), Spacer(1, 5),
     ])
 
 story = [
@@ -158,6 +160,8 @@ story.append(KeepTogether([
 ]))
 
 story += section('Publications &amp; Preprints')
+story.append(pub('Sparse neural control of unethical behavior in language models', None,
+    '<b>Yuejia Li</b>, Hao Wu, Ke He, Xiyuan Yang, Mang Ye, Fangzhao Wu', 'Manuscript, 2026'))
 story.append(pub('Radioactive Feedback: Tracing Models Trained by Label-Only LLM Supervision',
     'https://arxiv.org/abs/2610.15685',
     '<b>Yuejia Li</b>, JunHeng Li, Hao Wu, Ke He, Mang Ye', 'arXiv preprint, 2026'))
